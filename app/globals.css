@@ -9,6 +9,20 @@ body {
   font-family: var(--font-gellix), system-ui, sans-serif;
   background-color: #ffffff;
   color: #232732;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+::selection {
+  background-color: #232732;
+  color: #ffffff;
+}
+
+h1,
+h2,
+h3,
+h4 {
+  text-wrap: balance;
 }
 
 /* Reusable button styles */

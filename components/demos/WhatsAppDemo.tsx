@@ -2,7 +2,7 @@
 
 import { Fragment, useEffect, useRef } from "react";
 import gsap from "gsap";
-import { Mic, MoreVertical, Phone, Video } from "lucide-react";
+import { Lock, Mic, MoreVertical, Phone, Video } from "lucide-react";
 
 const MESSAGES = [
   {
@@ -38,18 +38,19 @@ const MESSAGES = [
 ] as const;
 
 export default function WhatsAppDemo() {
-  const chatRef = useRef<HTMLDivElement>(null);
+  const rootRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    const chat = chatRef.current;
-    if (!chat) return;
+    const root = rootRef.current;
+    if (!root) return;
 
     const bubbles = gsap.utils.toArray<HTMLElement>(
-      chat.querySelectorAll("[data-bubble]")
+      root.querySelectorAll("[data-bubble]")
     );
     const typings = gsap.utils.toArray<HTMLElement>(
-      chat.querySelectorAll("[data-typing]")
+      root.querySelectorAll("[data-typing]")
     );
+    const presence = root.querySelector<HTMLElement>("[data-presence]");
 
     if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
       gsap.set(bubbles, { display: "block", autoAlpha: 1 });
@@ -60,11 +61,19 @@ export default function WhatsAppDemo() {
     bubbles.forEach((bubble) => {
       const isClient = bubble.dataset.bubble === "client";
       gsap.set(bubble, {
-        transformOrigin: isClient ? "100% 100%" : "0% 100%",
+        transformOrigin: isClient ? "100% 0%" : "0% 0%",
       });
     });
 
-    const tl = gsap.timeline({ repeat: -1, repeatDelay: 0.8 });
+    const setPresence = (text: string) => {
+      if (presence) presence.textContent = text;
+    };
+
+    const tl = gsap.timeline({
+      repeat: -1,
+      repeatDelay: 0.8,
+      onRepeat: () => setPresence("online"),
+    });
     tl.set(bubbles, { display: "none" });
     tl.set(typings, { display: "none" });
 
@@ -72,9 +81,10 @@ export default function WhatsAppDemo() {
       const isAi = bubble.dataset.bubble === "ai";
 
       if (isAi) {
-        const typing = chat.querySelector<HTMLElement>(`[data-typing="${i}"]`);
+        const typing = root.querySelector<HTMLElement>(`[data-typing="${i}"]`);
         if (typing) {
           tl.set(typing, { display: "block" }, "+=0.65");
+          tl.call(() => setPresence("typing…"));
           tl.fromTo(
             typing,
             { autoAlpha: 0, y: 8 },
@@ -82,6 +92,7 @@ export default function WhatsAppDemo() {
           );
           tl.to({}, { duration: 1.4 });
           tl.set(typing, { display: "none" });
+          tl.call(() => setPresence("online"));
         }
       }
 
@@ -112,7 +123,10 @@ export default function WhatsAppDemo() {
   }, []);
 
   return (
-    <div className="w-full max-w-sm rounded-2xl border border-[#E5E5E5] overflow-hidden shadow-sm select-none">
+    <div
+      ref={rootRef}
+      className="w-full max-w-sm rounded-2xl border border-[#E5E5E5] overflow-hidden shadow-[0_8px_30px_rgba(35,39,50,0.08)] select-none"
+    >
       {/* Header */}
       <div className="bg-[#075E54] text-white px-4 py-3 flex items-center gap-3">
         <div className="w-9 h-9 rounded-full bg-white/20 flex items-center justify-center text-xs font-semibold">
@@ -120,25 +134,35 @@ export default function WhatsAppDemo() {
         </div>
         <div className="flex-1 min-w-0">
           <p className="text-sm font-medium leading-tight">Confidence Cargo</p>
-          <p className="text-[11px] text-white/70 leading-tight">online</p>
+          <p data-presence className="text-[11px] text-white/70 leading-tight">
+            online
+          </p>
         </div>
-        <Video size={18} className="text-white/90" />
-        <Phone size={16} className="text-white/90" />
-        <MoreVertical size={18} className="text-white/90" />
+        <Video size={18} className="text-white/80" />
+        <Phone size={16} className="text-white/80" />
+        <MoreVertical size={18} className="text-white/80" />
       </div>
 
       {/* Chat area */}
-      <div
-        ref={chatRef}
-        className="bg-[#ECE5DD] px-3 py-4 h-[350px] flex flex-col justify-end gap-2 overflow-hidden"
-      >
+      <div className="bg-[#ECE5DD] [background-image:radial-gradient(#dbd2c4_1px,transparent_1px)] [background-size:16px_16px] px-3 py-4 h-[380px] flex flex-col justify-end gap-2 overflow-hidden">
+        {/* Date + encryption chips */}
+        <div className="flex flex-col items-center gap-1.5 mb-1">
+          <span className="bg-white/90 text-[#54656F] text-[11px] rounded-md px-2.5 py-1 shadow-sm">
+            Today
+          </span>
+          <span className="flex items-center gap-1 bg-[#FDF4C5] text-[#54656F] text-[10.5px] rounded-md px-2.5 py-1.5 text-center shadow-sm">
+            <Lock size={10} className="shrink-0" />
+            Messages are end-to-end encrypted
+          </span>
+        </div>
+
         {MESSAGES.map((msg, i) => (
           <Fragment key={i}>
             {msg.from === "ai" && (
               <div
                 data-typing={i}
                 style={{ display: "none" }}
-                className="self-start bg-white rounded-lg px-3 py-2.5 shadow-sm"
+                className="self-start bg-white rounded-lg rounded-tl-none px-3 py-2.5 shadow-sm"
               >
                 <span className="flex items-center gap-1">
                   {[0, 1, 2].map((d) => (
@@ -154,10 +178,10 @@ export default function WhatsAppDemo() {
             <div
               data-bubble={msg.from}
               style={{ display: "none" }}
-              className={`max-w-[80%] rounded-lg px-3 py-2 shadow-sm text-[13px] leading-snug ${
+              className={`max-w-[80%] px-3 py-2 shadow-sm text-[13px] leading-snug ${
                 msg.from === "client"
-                  ? "self-end bg-[#DCF8C6]"
-                  : "self-start bg-white"
+                  ? "self-end bg-[#DCF8C6] rounded-lg rounded-tr-none"
+                  : "self-start bg-white rounded-lg rounded-tl-none"
               }`}
             >
               <p>{msg.text}</p>
@@ -174,7 +198,7 @@ export default function WhatsAppDemo() {
 
       {/* Input bar */}
       <div className="bg-[#F0F0F0] px-3 py-2 flex items-center gap-2">
-        <div className="flex-1 bg-white rounded-full px-4 py-2 text-[13px] text-[#6B7280]">
+        <div className="flex-1 bg-white rounded-full px-4 py-2 text-[13px] text-[#9CA3AF]">
           Type a message
         </div>
         <div className="w-9 h-9 rounded-full bg-[#075E54] flex items-center justify-center">

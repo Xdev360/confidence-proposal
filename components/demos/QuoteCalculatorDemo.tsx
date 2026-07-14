@@ -2,6 +2,7 @@
 
 import { useEffect, useRef } from "react";
 import gsap from "gsap";
+import { Zap } from "lucide-react";
 
 const FIELDS = [
   { label: "Origin", value: "Lagos, Nigeria" },
@@ -9,6 +10,9 @@ const FIELDS = [
   { label: "Weight", value: "500 kg" },
   { label: "Cargo Type", value: "General Goods" },
 ];
+
+const FOCUS_SHADOW = "0 0 0 3px rgba(35,39,50,0.07)";
+const NO_SHADOW = "0 0 0 0px rgba(35,39,50,0)";
 
 export default function QuoteCalculatorDemo() {
   const rootRef = useRef<HTMLDivElement>(null);
@@ -21,7 +25,10 @@ export default function QuoteCalculatorDemo() {
       root.querySelectorAll("[data-field]")
     );
     const values = gsap.utils.toArray<HTMLElement>(
-      root.querySelectorAll("[data-value]")
+      root.querySelectorAll("[data-text]")
+    );
+    const carets = gsap.utils.toArray<HTMLElement>(
+      root.querySelectorAll("[data-caret]")
     );
     const button = root.querySelector<HTMLElement>("[data-button]");
     const loading = root.querySelector<HTMLElement>("[data-loading]");
@@ -45,17 +52,24 @@ export default function QuoteCalculatorDemo() {
     tl.set(result, { autoAlpha: 0, y: 20, scale: 0.97 });
     tl.set(loading, { autoAlpha: 0 });
     tl.set(values, { autoAlpha: 1 });
+    tl.set(carets, { display: "none" });
 
-    // Fill each field with a typing effect, highlighting the active one
+    // Fill each field with a typing effect: focus ring, caret, then blur
     values.forEach((el, i) => {
       const text = FIELDS[i].value;
       const proxy = { p: 0 };
 
       tl.to(
         boxes[i],
-        { borderColor: "#232732", duration: 0.25, ease: "power2.out" },
+        {
+          borderColor: "#232732",
+          boxShadow: FOCUS_SHADOW,
+          duration: 0.25,
+          ease: "power2.out",
+        },
         i === 0 ? "+=0.4" : "+=0.15"
       );
+      tl.set(carets[i], { display: "inline-block" });
       tl.fromTo(
         proxy,
         { p: 0 },
@@ -68,7 +82,12 @@ export default function QuoteCalculatorDemo() {
           },
         }
       );
-      tl.to(boxes[i], { borderColor: "#E5E5E5", duration: 0.35 });
+      tl.set(carets[i], { display: "none" }, "+=0.15");
+      tl.to(boxes[i], {
+        borderColor: "#E5E5E5",
+        boxShadow: NO_SHADOW,
+        duration: 0.35,
+      });
     });
 
     // Button press, brief calculation, then the estimate springs in
@@ -78,7 +97,7 @@ export default function QuoteCalculatorDemo() {
       "+=0.3"
     );
     tl.to(loading, { autoAlpha: 1, duration: 0.2 });
-    tl.to(loading, { autoAlpha: 0, duration: 0.2 }, "+=0.8");
+    tl.to(loading, { autoAlpha: 0, duration: 0.2 }, "+=0.9");
     tl.fromTo(
       result,
       { autoAlpha: 0, y: 20, scale: 0.97 },
@@ -86,7 +105,7 @@ export default function QuoteCalculatorDemo() {
     );
 
     // Hold, then drift everything away gently before replaying
-    tl.to(result, { autoAlpha: 0, y: -10, duration: 0.45, ease: "power2.in" }, "+=3");
+    tl.to(result, { autoAlpha: 0, y: -10, duration: 0.45, ease: "power2.in" }, "+=3.5");
     tl.to(values, { autoAlpha: 0, duration: 0.35, stagger: 0.04, ease: "power2.in" }, "<");
 
     return () => {
@@ -97,11 +116,16 @@ export default function QuoteCalculatorDemo() {
   return (
     <div
       ref={rootRef}
-      className="w-full max-w-sm border border-[#E5E5E5] rounded-2xl bg-white shadow-sm overflow-hidden select-none"
+      className="w-full max-w-sm border border-[#E5E5E5] rounded-2xl bg-white shadow-[0_8px_30px_rgba(35,39,50,0.08)] overflow-hidden select-none"
     >
-      <div className="px-5 py-4 border-b border-[#E5E5E5]">
-        <p className="text-sm font-semibold">Instant Quote</p>
-        <p className="text-xs text-[#6B7280] mt-0.5">Get an estimate in seconds</p>
+      <div className="px-5 py-4 border-b border-[#E5E5E5] flex items-center justify-between">
+        <div>
+          <p className="text-sm font-semibold">Instant Quote</p>
+          <p className="text-xs text-[#9CA3AF] mt-0.5">Get an estimate in seconds</p>
+        </div>
+        <div className="w-8 h-8 rounded-full bg-[#F7F6F3] flex items-center justify-center">
+          <Zap size={14} className="text-[#232732]" />
+        </div>
       </div>
 
       <div className="p-5 space-y-3">
@@ -110,12 +134,19 @@ export default function QuoteCalculatorDemo() {
             <div
               key={field.label}
               data-field
-              className="border border-[#E5E5E5] rounded-lg px-3 py-2"
+              className="border border-[#E5E5E5] rounded-lg px-3 py-2.5"
             >
-              <p className="text-[10px] uppercase tracking-wide text-[#6B7280]">
+              <p className="text-[10px] uppercase tracking-wide text-[#9CA3AF] mb-0.5">
                 {field.label}
               </p>
-              <p data-value className="text-[13px] font-medium min-h-[18px]" />
+              <p className="text-[13px] font-medium min-h-[18px] leading-[18px]">
+                <span data-text />
+                <span
+                  data-caret
+                  style={{ display: "none" }}
+                  className="w-[1.5px] h-[12px] bg-[#232732] ml-[1px] align-middle animate-pulse"
+                />
+              </p>
             </div>
           ))}
         </div>
@@ -139,12 +170,29 @@ export default function QuoteCalculatorDemo() {
           </span>
         </div>
 
-        <div data-result className="bg-[#F8F7F2] rounded-xl p-4 opacity-0">
-          <p className="text-xs text-[#6B7280] mb-1">Estimated Cost</p>
-          <p className="text-lg font-semibold">₦2,850,000 – ₦3,150,000</p>
-          <p className="text-xs text-[#6B7280] mt-1">
-            Sea Freight · 18–22 days · Air option available
+        <div
+          data-result
+          className="rounded-xl border border-[#E5E5E5] bg-[#FAFAF8] p-4 opacity-0"
+        >
+          <div className="flex items-center justify-between mb-1.5">
+            <p className="text-xs text-[#6B7280]">Estimated Cost</p>
+            <span className="text-[10px] font-medium uppercase tracking-wide bg-[#E9F6EE] text-[#16A34A] rounded-full px-2 py-0.5">
+              Instant
+            </span>
+          </div>
+          <p className="text-xl font-semibold tracking-tight">
+            ₦2,850,000 – ₦3,150,000
           </p>
+          <div className="mt-3 pt-3 border-t border-[#E5E5E5] space-y-2">
+            <div className="flex items-center justify-between text-xs">
+              <span className="text-[#6B7280]">Sea Freight (recommended)</span>
+              <span className="font-medium">18–22 days</span>
+            </div>
+            <div className="flex items-center justify-between text-xs">
+              <span className="text-[#6B7280]">Air Freight option</span>
+              <span className="font-medium">5–7 days</span>
+            </div>
+          </div>
         </div>
       </div>
     </div>

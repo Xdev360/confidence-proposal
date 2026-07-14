@@ -1,4 +1,5 @@
 import { Check } from "lucide-react";
+import { SectionHeading } from "@/components/ui/SectionHeading";
 
 const PHASES = [
   {
@@ -44,24 +45,19 @@ export default function PhaseBreakdown() {
   return (
     <section
       id="phases"
-      className="max-w-5xl mx-auto px-6 md:px-8 py-20 md:py-24 border-t border-[#E5E5E5]"
+      className="max-w-5xl mx-auto px-6 md:px-8 py-20 md:py-28 border-t border-[#E5E5E5]"
     >
-      <div className="max-w-3xl mx-auto text-center mb-14">
-        <h2 className="text-[32px] md:text-[48px] leading-[1.15] font-semibold tracking-tight mb-4">
-          A Practical 3-Phase Plan
-        </h2>
-        <p className="text-lg text-[#4A4A4A]">
-          We recommend breaking the project into three clear phases. This
-          approach allows you to see progress at each stage while keeping
-          everything manageable.
-        </p>
-      </div>
+      <SectionHeading
+        eyebrow="The Plan"
+        title="A Practical 3-Phase Plan"
+        lead="We recommend breaking the project into three clear phases. This approach allows you to see progress at each stage while keeping everything manageable."
+      />
 
       <div className="space-y-8">
         {PHASES.map((phase) => (
           <div
             key={phase.badge}
-            className="bg-white border border-[#E5E5E5] rounded-[24px] p-8 md:p-12"
+            className="bg-white border border-[#E5E5E5] rounded-[24px] p-8 md:p-12 transition-colors duration-300 hover:border-[#232732]/30"
           >
             {/* Title + phase badge */}
             <div className="flex items-start justify-between gap-4">
@@ -90,7 +86,7 @@ export default function PhaseBreakdown() {
 
             {/* Duration */}
             <div className="mt-12">
-              <p className="text-xs uppercase tracking-wide text-[#6B7280] mb-1">
+              <p className="text-xs uppercase tracking-[0.2em] text-[#6B7280] mb-1.5">
                 Duration
               </p>
               <p className="text-3xl md:text-4xl font-bold tracking-tight">
@@ -101,7 +97,7 @@ export default function PhaseBreakdown() {
         ))}
       </div>
 
-      <div className="mt-10 text-center">
+      <div className="mt-12 text-center">
         <p className="text-sm text-[#6B7280]">
           Total Timeline:{" "}
           <span className="font-medium text-[#232732]">3.5 months (14 weeks)</span>
