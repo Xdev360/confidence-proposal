@@ -89,13 +89,13 @@ export default function PhaseBreakdown() {
             </div>
 
             {/* Duration */}
-            <div className="mt-12 flex items-center justify-between gap-4">
-              <p className="text-xl md:text-2xl font-semibold tracking-tight">
+            <div className="mt-12">
+              <p className="text-xs uppercase tracking-wide text-[#6B7280] mb-1">
+                Duration
+              </p>
+              <p className="text-3xl md:text-4xl font-bold tracking-tight">
                 {phase.duration}
               </p>
-              <span className="rounded-full border border-[#E5E5E5] px-6 py-2.5 text-sm font-medium text-[#6B7280]">
-                Duration
-              </span>
             </div>
           </div>
         ))}

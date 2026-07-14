@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { Button } from "./ui/Button";
+import { WHATSAPP_URL } from "@/lib/site";
 
 export default function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
@@ -27,7 +28,7 @@ export default function Navbar() {
           <div className="hidden md:block">
             <Button 
               variant="primary" 
-              onClick={() => window.location.href = '#next-steps'}
+              onClick={() => window.open(WHATSAPP_URL, "_blank")}
             >
               Speak With Us
             </Button>
@@ -59,7 +60,7 @@ export default function Navbar() {
             <Button 
               variant="primary" 
               className="mt-2 w-full"
-              onClick={() => window.location.href = '#next-steps'}
+              onClick={() => window.open(WHATSAPP_URL, "_blank")}
             >
               Speak With Us
             </Button>

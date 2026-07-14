@@ -1,3 +1,5 @@
+import { WHATSAPP_URL } from "@/lib/site";
+
 export default function Footer() {
   return (
     <footer className="bg-[#232732] text-white mt-10">
@@ -46,7 +48,9 @@ export default function Footer() {
                 Get in Touch
               </p>
               <a
-                href="#next-steps"
+                href={WHATSAPP_URL}
+                target="_blank"
+                rel="noopener noreferrer"
                 className="inline-flex items-center justify-center px-4 py-2 text-sm font-medium rounded-lg bg-white text-[#232732] hover:bg-white/90 transition-colors"
               >
                 Speak With Us

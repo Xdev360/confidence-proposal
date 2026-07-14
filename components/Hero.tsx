@@ -1,6 +1,7 @@
 "use client";
 
 import { Button } from "./ui/Button";
+import { WHATSAPP_URL } from "@/lib/site";
 
 export default function Hero() {
   return (
@@ -36,7 +37,7 @@ export default function Hero() {
           <Button 
             variant="secondary" 
             size="md"
-            onClick={() => window.location.href = '#next-steps'}
+            onClick={() => window.open(WHATSAPP_URL, "_blank")}
           >
             Speak With Us
           </Button>

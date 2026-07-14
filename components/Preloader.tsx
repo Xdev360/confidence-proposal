@@ -33,7 +33,7 @@ export default function Preloader({ onComplete }: PreloaderProps) {
 
     chars.forEach((char, index) => {
       tl.to(textRef.current, {
-        duration: 0.035,
+        duration: 0.055,
         onUpdate: function () {
           if (textRef.current) {
             textRef.current.textContent = text.substring(0, index + 1);
@@ -47,7 +47,7 @@ export default function Preloader({ onComplete }: PreloaderProps) {
       progressRef.current,
       {
         width: "100%",
-        duration: 2.2,
+        duration: 3,
         ease: "power1.inOut",
       },
       0.8 // Delay progress bar slightly

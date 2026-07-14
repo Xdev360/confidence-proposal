@@ -74,18 +74,18 @@ export default function WhatsAppDemo() {
       if (isAi) {
         const typing = chat.querySelector<HTMLElement>(`[data-typing="${i}"]`);
         if (typing) {
-          tl.set(typing, { display: "block" }, "+=0.45");
+          tl.set(typing, { display: "block" }, "+=0.65");
           tl.fromTo(
             typing,
             { autoAlpha: 0, y: 8 },
-            { autoAlpha: 1, y: 0, duration: 0.25, ease: "power2.out" }
+            { autoAlpha: 1, y: 0, duration: 0.3, ease: "power2.out" }
           );
-          tl.to({}, { duration: 1.05 });
+          tl.to({}, { duration: 1.4 });
           tl.set(typing, { display: "none" });
         }
       }
 
-      tl.set(bubble, { display: "block" }, isAi ? undefined : "+=0.7");
+      tl.set(bubble, { display: "block" }, isAi ? undefined : "+=1");
       tl.fromTo(
         bubble,
         { autoAlpha: 0, y: 16, scale: 0.9 },
@@ -103,7 +103,7 @@ export default function WhatsAppDemo() {
         stagger: 0.05,
         ease: "power2.in",
       },
-      "+=3"
+      "+=3.5"
     );
 
     return () => {
