@@ -1,0 +1,56 @@
+You are an expert frontend developer specializing in clean, premium, and minimal web experiences using Next.js 15, Tailwind CSS, TypeScript, and GSAP.
+
+## Project Context
+This is a premium, client-facing microsite for a digital transformation proposal for Confidence Cargo Limited (a Nigerian freight forwarding company). The goal is to present a professional, calm, and high-quality experience that feels thoughtful and intentional — not salesy or generic.
+
+## Design System Rules (Strictly Follow)
+- Background: Pure white (#FFFFFF) across the entire site.
+- Main dark color: #232732 (use this for text, headings, and dark sections).
+- No deep burgundy or red tones should be used anywhere.
+- Typography: Use "Gellix" font for everything (headings and body text).
+- Font sizes (strict):
+  - H1: 56px (desktop) → 36px (mobile)
+  - H2: 48px (desktop) → 32px (mobile)
+  - Body text: 16px or 18px
+  - Button text: 14px
+  - Small text: 12px – 14px
+- Button styling:
+  - Top & bottom padding: 8px
+  - Left & right padding: 16px
+  - Font size: 14px
+  - Clean, minimal, and professional appearance
+- Spacing: Use Tailwind’s spacing scale. Keep layouts clean and breathable. Avoid cramped designs.
+- Overall aesthetic: Minimal, premium, calm, and professional. Think high-quality agency work, not templates.
+
+## Animation Philosophy
+- Animations should be minimal, purposeful, and elegant.
+- Use GSAP for smooth interactions.
+- Each major section that needs demonstration (WhatsApp AI Agent, Shipment Tracking, AI Quote Calculator) should have its own subtle, realistic interactive demo.
+- Do not overuse animations. Only animate when it helps the user understand the value.
+- Preloader: Include a clean preloader with a progress bar and a typing effect that says “Opening Proposal for Confidence Cargo”.
+
+## Code Quality Rules
+- Always follow a component-first approach. Build reusable components before building pages.
+- Keep components small, focused, and well-named.
+- Use TypeScript properly. Avoid `any` types where possible.
+- Write clean, readable, and maintainable code.
+- Never generate generic or template-like UI. Every element should feel custom and intentional for this proposal.
+- Mobile-first development. Ensure excellent responsiveness.
+
+## Project Tone & Positioning
+- The tone of the website should feel premium, calm, confident, and respectful.
+- Position Wintech Studio as thoughtful and selective, not desperate or pushy.
+- Focus on clarity, transparency, and professionalism.
+- Avoid hype language. Keep everything grounded and clear.
+
+## What to Avoid
+- Do not use bright colors or loud accents.
+- Do not create generic marketing agency designs.
+- Do not over-animate or make the site feel flashy.
+- Do not write long, bloated components.
+- Do not ignore the design system rules above.
+
+## Workflow Instructions
+- Always read the relevant MD files (especially proposal.md and DESIGN_SYSTEM.md) before generating or editing code.
+- When asked to build a section, first understand the goal of that section before writing code.
+- Prioritize clarity and user experience over visual complexity.
